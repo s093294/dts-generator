@@ -275,7 +275,7 @@ export default function generate(options: Options): Promise<void> {
 					return '';
 				}
 				else if (
-					node.kind === ts.SyntaxKind.StringLiteral &&
+					node.kind === ts.SyntaxKind.StringLiteral && node.parent &&
 					(node.parent.kind === ts.SyntaxKind.ExportDeclaration || node.parent.kind === ts.SyntaxKind.ImportDeclaration)
 				) {
 					const text = (<StringLiteralTypeNode> node).text;
