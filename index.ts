@@ -274,6 +274,13 @@ export default function generate(options: Options): Promise<void> {
 				else if (node.kind === ts.SyntaxKind.DeclareKeyword) {
 					return '';
 				}
+				else if (node.kind === ts.SyntaxKind.ImportDeclaration){
+                    			if (node.moduleSpecifier && node.importClause) {
+                        			if (node.importClause.name) {
+                            				return ' import ' + node.importClause.name.text + ' from \'' + filenameToMid(pathUtil.join(pathUtil.dirname(sourceModuleId), node.moduleSpecifier.text)) + '\';'
+                        			}
+                    			}
+                		}
 				else if (
 					node.kind === ts.SyntaxKind.StringLiteral &&
 					(node.parent.kind === ts.SyntaxKind.ExportDeclaration || node.parent.kind === ts.SyntaxKind.ImportDeclaration)
