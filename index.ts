@@ -275,10 +275,23 @@ export default function generate(options: Options): Promise<void> {
 					return '';
 				}
 				else if (node.kind === ts.SyntaxKind.ImportDeclaration){
-                    			if (node.moduleSpecifier && node.importClause) {
-                        			if (node.importClause.name) {
-                            				return ' import ' + node.importClause.name.text + ' from \'' + filenameToMid(pathUtil.join(pathUtil.dirname(sourceModuleId), node.moduleSpecifier.text)) + '\';'
+                    			if (node["moduleSpecifier"] && node["importClause"]) {
+                        			if (node["importClause"]["name]) {
+                            				return ' import ' + node["importClause"]["name"]["text"] + ' from \'' + filenameToMid(pathUtil.join(pathUtil.dirname(sourceModuleId), node["moduleSpecifier"]["text"])) + '\';'
                         			}
+                        			else if (node["importClause"]["namedBindings"]) {
+                            				var bindingElements = node["importClause"]["namedBindings"]["elements"];
+                            				var names = []
+				                        for (var i in bindingElements) {
+				                        	if (typeof (bindingElements[i]) === "object") {
+				                                    names.push(bindingElements[i].name.text);
+				                                }
+				
+				                        }
+				
+				                        return ' import {' + names.join(", ") + '} from \'' + filenameToMid(pathUtil.join(pathUtil.dirname(sourceModuleId), node["moduleSpecifier"]["text"])) + '\';'
+				
+				                }
                     			}
                 		}
 				else if (
